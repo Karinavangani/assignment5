@@ -1,0 +1,220 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Assignment5</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+
+  <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/lumen/bootstrap.min.css" rel="stylesheet" integrity="sha384-mvYjhBJXQ9VlNETV/xXShy849GsBHnKzVVudnMOcWUVM/6Nd2ksj8VNng5f8ylyX" crossorigin="anonymous">
+<link href='https://fonts.googleapis.com/css?family=Elsie+Swash+Caps' rel='stylesheet' type='text/css'>
+<style type="text/css">
+	 body , html{
+    font-family: 'Elsie Swash Caps',cursive;
+    background-color: #f2f0f7;
+   /* background: #a3a3c2;
+    font-color: #f0f0f5;*/
+    }
+    h1,p{
+      text-align: center;
+      font-color:#7a0177;
+
+    }
+	
+	#map{
+		height: 600px;
+		width:100%;
+		;
+		  }
+    #infoWindow{
+      background: #a6bddb;
+      margin-left: 20px;
+    }
+/*intro{
+    text-align: center;
+    /*/*/*/*font-color: #f0f0f5;*/
+    max-width: 1000px;
+    padding:20px;
+    margin: 0 auto;*/*/*/*/
+    /*background-color: #B0E0E6;*/
+        }
+  </style>
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">My Well-Designed Site</a>
+        </div>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+     <!--  <a class="navbar-brand" href="#">Brand -->
+      <!-- <img alt="Brand" src='https://carsey.unh.edu/sites/carsey.unh.edu/files/icon_3_money-03_0.png'> -->
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">New York <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Colarado</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">California</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<h1>Median Incomes across United States</h1>
+<p>Click to Know the Median Income</p>
+<div id="map"></div>
+<div id="infoWindow"></div>
+<script type="text/javascript">
+
+ 
+      var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+});
+
+      var map = L.map('map', {
+        scrollWheelZoom: false,
+        center: [40.7127837, -74.0059413],
+        zoom: 3
+      });
+      map.addLayer(layer);
+      var geojson;
+
+      
+     // $.getJSON('data/unitedstates.geojson', function(states_data) {
+     //       // console.log(states_data);
+     //  geojson=L.geoJson(states_data).addTo(map);
+
+     //  });
+
+      
+      function getColor(m) {
+        return m > 65000 ? '#4a1486' :
+               m > 60000 ? '#6a51a3':
+               m > 55000 ? '#807dba' :
+               m > 50000 ? '#9e9ac8' :
+               m > 45000 ? '#bcbddc' :
+               m > 40000 ? '#dadaeb' :
+               // m > 10   ? '#FED976' :
+                          '#f2f0f7';
+          }
+         function style(feature) {
+        console.log(feature);
+
+       console.log(parseInt(feature.properties.median_income))
+
+        return {
+        fillColor: getColor(parseInt(feature.properties.median_income)),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+            };
+      }
+      function zoomToFeature(e) {
+      map.fitBounds(e.target.getBounds());
+        }
+
+      function highlightFeature(e) {
+        var layer = e.target;
+
+        layer.setStyle({
+            weight: 5,
+            color: '#f7fcb9',
+            dashArray: '',
+            fillOpacity: 0.7
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera) {
+            layer.bringToFront();
+        }
+             console.log(layer.feature.properties.name);
+          $('#infoWindow').text(layer.feature.properties.NAME+'-'+layer.feature.properties.median_income);
+        }
+        function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+                 }
+        function onEachFeature(feature, layer) {
+            layer.on({
+           mouseover: highlightFeature,
+           mouseout: resetHighlight,
+           click: zoomToFeature
+           
+                    });
+                    }
+
+      // L.geoJson(states_data, {style: style}).addTo(map);
+      $.getJSON('data/unitedstates.geojson', function(states_data) {
+           // console.log(states_data);
+      geojson=L.geoJson(states_data,{
+        style: style,
+        onEachFeature:onEachFeature
+      }).addTo(map);
+
+      });
+</script>
+</body>
+</html>
